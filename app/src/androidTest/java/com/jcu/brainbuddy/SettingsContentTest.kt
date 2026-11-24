@@ -26,6 +26,7 @@ class SettingsContentTest {
     private var difficulty: Difficulty? = null
     private var count: Int? = null
     private var largeText: Boolean? = null
+    private var challenge: Boolean? = null
     private var cleared = false
 
     private fun show(settings: AppSettings = AppSettings()) {
@@ -38,6 +39,7 @@ class SettingsContentTest {
                     onQuestionCountChange = { count = it },
                     onLargeTextChange = { largeText = it },
                     onHapticsChange = {},
+                    onChallengeModeChange = { challenge = it },
                     onClearProgress = { cleared = true }
                 )
             }
@@ -64,6 +66,15 @@ class SettingsContentTest {
         composeRule.onNodeWithTag("large_text_switch").performScrollTo().performClick()
 
         assertEquals(true, largeText)
+    }
+
+    @Test
+    fun challengeModeSwitchTogglesTheSetting() {
+        show(AppSettings(challengeMode = false))
+
+        composeRule.onNodeWithTag("challenge_switch").performScrollTo().performClick()
+
+        assertEquals(true, challenge)
     }
 
     @Test

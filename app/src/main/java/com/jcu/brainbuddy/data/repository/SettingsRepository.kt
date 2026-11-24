@@ -12,4 +12,5 @@ interface SettingsRepository {
     suspend fun setQuestionCount(count: Int)
     suspend fun setLargeText(enabled: Boolean)
     suspend fun setHaptics(enabled: Boolean)
+    suspend fun setChallengeMode(enabled: Boolean)
 }

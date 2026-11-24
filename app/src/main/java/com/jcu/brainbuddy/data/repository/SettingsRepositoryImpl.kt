@@ -26,7 +26,8 @@ class SettingsRepositoryImpl @Inject constructor(
                 ?.takeIf { it in AppSettings.QUESTION_COUNT_OPTIONS }
                 ?: defaults.questionCount,
             largeText = prefs[LARGE_TEXT] ?: defaults.largeText,
-            hapticsEnabled = prefs[HAPTICS] ?: defaults.hapticsEnabled
+            hapticsEnabled = prefs[HAPTICS] ?: defaults.hapticsEnabled,
+            challengeMode = prefs[CHALLENGE_MODE] ?: defaults.challengeMode
         )
     }
 
@@ -50,11 +51,16 @@ class SettingsRepositoryImpl @Inject constructor(
         dataStore.edit { it[HAPTICS] = enabled }
     }
 
+    override suspend fun setChallengeMode(enabled: Boolean) {
+        dataStore.edit { it[CHALLENGE_MODE] = enabled }
+    }
+
     private companion object {
         val CATEGORY = stringPreferencesKey("category")
         val DIFFICULTY = stringPreferencesKey("difficulty")
         val QUESTION_COUNT = intPreferencesKey("question_count")
         val LARGE_TEXT = booleanPreferencesKey("large_text")
         val HAPTICS = booleanPreferencesKey("haptics")
+        val CHALLENGE_MODE = booleanPreferencesKey("challenge_mode")
     }
 }

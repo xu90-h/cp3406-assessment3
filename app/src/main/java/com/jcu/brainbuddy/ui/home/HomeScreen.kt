@@ -93,7 +93,11 @@ private fun WelcomeCard(state: HomeUiState, onStartQuiz: (QuizCategory) -> Unit)
             }
             Spacer(Modifier.height(8.dp))
             Text(
-                "${settings.questionCount} questions - ${settings.difficulty.label}",
+                if (settings.challengeMode) {
+                    "${settings.questionCount} questions - Challenge mode - ${settings.difficulty.label}"
+                } else {
+                    "${settings.questionCount} questions"
+                },
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.fillMaxWidth(),

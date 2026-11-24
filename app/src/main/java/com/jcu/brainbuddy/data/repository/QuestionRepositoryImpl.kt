@@ -14,8 +14,13 @@ class QuestionRepositoryImpl @Inject constructor(
     override suspend fun getQuestions(
         category: QuizCategory,
         difficulty: Difficulty,
-        count: Int
+        count: Int,
+        challengeMode: Boolean
     ): QuestionBatch {
+        if (!challengeMode) {
+            return QuestionBatch(FallbackQuestions.forCategory(category, count), QuestionSource.BUILT_IN)
+        }
+
         val online = try {
             val response = api.getQuestions(count, category.apiId, difficulty.apiValue)
             if (response.responseCode == API_OK && response.results.isNotEmpty()) {
@@ -31,9 +36,9 @@ class QuestionRepositoryImpl @Inject constructor(
         }
 
         return if (online != null) {
-            QuestionBatch(online, isOnline = true)
+            QuestionBatch(online, QuestionSource.ONLINE)
         } else {
-            QuestionBatch(FallbackQuestions.forCategory(category, count), isOnline = false)
+            QuestionBatch(FallbackQuestions.forCategory(category, count), QuestionSource.OFFLINE_FALLBACK)
         }
     }
 

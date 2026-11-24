@@ -33,6 +33,8 @@ class SettingsViewModel @Inject constructor(
 
     fun setHaptics(enabled: Boolean) = launch { settingsRepository.setHaptics(enabled) }
 
+    fun setChallengeMode(enabled: Boolean) = launch { settingsRepository.setChallengeMode(enabled) }
+
     /** Lets the learner (or a parent) erase everything the app has stored about them. */
     fun clearProgress() = launch { resultRepository.clearAll() }
 

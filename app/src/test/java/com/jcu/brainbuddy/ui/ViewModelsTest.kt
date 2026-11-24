@@ -55,6 +55,7 @@ class ViewModelsTest {
         vm.setQuestionCount(10)
         vm.setLargeText(true)
         vm.setHaptics(false)
+        vm.setChallengeMode(true)
 
         val current = vm.settings.value
         assertEquals(QuizCategory.ANIMALS, current.category)
@@ -62,6 +63,7 @@ class ViewModelsTest {
         assertEquals(10, current.questionCount)
         assertTrue(current.largeText)
         assertFalse(current.hapticsEnabled)
+        assertTrue(current.challengeMode)
         job.cancel()
     }
 

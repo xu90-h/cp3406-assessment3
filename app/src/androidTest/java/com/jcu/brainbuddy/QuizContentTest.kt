@@ -89,7 +89,7 @@ class QuizContentTest {
 
     @Test
     fun offlineBannerOnlyShowsWhenOffline() {
-        show(QuizUiState(isLoading = false, progress = QuizProgress(questions), isOnline = false))
+        show(QuizUiState(isLoading = false, progress = QuizProgress(questions), offlineNotice = true))
 
         composeRule.onNodeWithTag("offline_banner").assertIsDisplayed()
     }

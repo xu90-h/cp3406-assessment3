@@ -162,7 +162,7 @@ private fun QuestionBody(
             modifier = Modifier.fillMaxWidth()
         )
 
-        if (!state.isOnline) OfflineBanner()
+        if (state.offlineNotice) OfflineBanner()
 
         Card(Modifier.fillMaxWidth()) {
             Text(
@@ -298,7 +298,7 @@ private fun OfflineBanner() {
             Icon(Icons.Filled.CloudOff, contentDescription = null)
             Spacer(Modifier.width(12.dp))
             Text(
-                "You are offline, so these questions come from the app.",
+                "Challenge questions could not load, so these questions come from the app.",
                 style = MaterialTheme.typography.bodyMedium
             )
         }

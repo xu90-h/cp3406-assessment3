@@ -42,7 +42,9 @@ data class AppSettings(
     val difficulty: Difficulty = Difficulty.EASY,
     val questionCount: Int = DEFAULT_QUESTION_COUNT,
     val largeText: Boolean = false,
-    val hapticsEnabled: Boolean = true
+    val hapticsEnabled: Boolean = true,
+    /** Online questions from Open Trivia DB; off by default because they are not written for children. */
+    val challengeMode: Boolean = false
 ) {
     companion object {
         const val DEFAULT_QUESTION_COUNT = 5

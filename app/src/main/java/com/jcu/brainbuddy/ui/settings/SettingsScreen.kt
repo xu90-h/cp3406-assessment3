@@ -54,6 +54,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
         onQuestionCountChange = viewModel::setQuestionCount,
         onLargeTextChange = viewModel::setLargeText,
         onHapticsChange = viewModel::setHaptics,
+        onChallengeModeChange = viewModel::setChallengeMode,
         onClearProgress = viewModel::clearProgress
     )
 }
@@ -67,6 +68,7 @@ fun SettingsContent(
     onQuestionCountChange: (Int) -> Unit,
     onLargeTextChange: (Boolean) -> Unit,
     onHapticsChange: (Boolean) -> Unit,
+    onChallengeModeChange: (Boolean) -> Unit,
     onClearProgress: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -99,7 +101,16 @@ fun SettingsContent(
                 }
             }
 
-            SettingsCard("Difficulty") {
+            SettingsCard("Challenge mode") {
+                SwitchRow("Online questions", settings.challengeMode, onChallengeModeChange, "challenge_switch")
+                Text(
+                    "Off: age-appropriate questions built into the app. On: questions from the internet, " +
+                        "which may be harder and are not written for children. Needs a grown-up's OK.",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            SettingsCard("Difficulty (challenge mode)") {
                 SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                     Difficulty.entries.forEachIndexed { index, difficulty ->
                         SegmentedButton(

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jcu.brainbuddy.data.repository.QuestionRepository
+import com.jcu.brainbuddy.data.repository.QuestionSource
 import com.jcu.brainbuddy.data.repository.ResultRepository
 import com.jcu.brainbuddy.data.repository.SettingsRepository
 import com.jcu.brainbuddy.domain.Difficulty
@@ -24,7 +25,8 @@ data class QuizUiState(
     val category: QuizCategory = QuizCategory.MATH,
     val difficulty: Difficulty = Difficulty.EASY,
     val progress: QuizProgress? = null,
-    val isOnline: Boolean = true,
+    /** True when challenge mode was on but the internet request failed. */
+    val offlineNotice: Boolean = false,
     val hapticsEnabled: Boolean = true,
     /** Set once the quiz is over and its result has been saved; the screen then navigates away. */
     val completedResult: QuizResult? = null
@@ -53,14 +55,14 @@ class QuizViewModel @Inject constructor(
         viewModelScope.launch {
             val settings = settingsRepository.settings.first()
             val category = categoryArg ?: settings.category
-            val batch = questionRepository.getQuestions(category, settings.difficulty, settings.questionCount)
+            val batch = questionRepository.getQuestions(category, settings.difficulty, settings.questionCount, settings.challengeMode)
             _uiState.update {
                 it.copy(
                     isLoading = false,
                     category = category,
                     difficulty = settings.difficulty,
                     progress = QuizProgress(batch.questions),
-                    isOnline = batch.isOnline,
+                    offlineNotice = batch.source == QuestionSource.OFFLINE_FALLBACK,
                     hapticsEnabled = settings.hapticsEnabled
                 )
             }

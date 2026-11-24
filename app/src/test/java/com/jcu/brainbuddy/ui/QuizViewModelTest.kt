@@ -5,6 +5,7 @@ import com.jcu.brainbuddy.FakeQuestionRepository
 import com.jcu.brainbuddy.FakeResultRepository
 import com.jcu.brainbuddy.FakeSettingsRepository
 import com.jcu.brainbuddy.data.repository.QuestionBatch
+import com.jcu.brainbuddy.data.repository.QuestionSource
 import com.jcu.brainbuddy.domain.AppSettings
 import com.jcu.brainbuddy.domain.Difficulty
 import com.jcu.brainbuddy.domain.QuizCategory
@@ -76,10 +77,34 @@ class QuizViewModelTest {
     }
 
     @Test
-    fun `offline fallback is surfaced to the screen`() {
-        questions.batch = QuestionBatch(listOf(question()), isOnline = false)
+    fun `failed challenge request shows the offline notice`() {
+        questions.batch = QuestionBatch(listOf(question()), QuestionSource.OFFLINE_FALLBACK)
 
-        assertFalse(viewModel().uiState.value.isOnline)
+        assertTrue(viewModel().uiState.value.offlineNotice)
+    }
+
+    @Test
+    fun `built-in and online questions show no notice`() {
+        assertFalse(viewModel().uiState.value.offlineNotice)
+
+        questions.batch = QuestionBatch(listOf(question()), QuestionSource.ONLINE)
+        assertFalse(viewModel().uiState.value.offlineNotice)
+    }
+
+    @Test
+    fun `challenge mode setting is passed to the repository`() {
+        settings = FakeSettingsRepository(AppSettings(challengeMode = true))
+
+        viewModel()
+
+        assertEquals(true, questions.lastChallengeMode)
+    }
+
+    @Test
+    fun `challenge mode is off by default`() {
+        viewModel()
+
+        assertEquals(false, questions.lastChallengeMode)
     }
 
     @Test

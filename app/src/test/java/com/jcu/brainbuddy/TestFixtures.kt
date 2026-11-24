@@ -2,6 +2,7 @@ package com.jcu.brainbuddy
 
 import com.jcu.brainbuddy.data.repository.QuestionBatch
 import com.jcu.brainbuddy.data.repository.QuestionRepository
+import com.jcu.brainbuddy.data.repository.QuestionSource
 import com.jcu.brainbuddy.data.repository.ResultRepository
 import com.jcu.brainbuddy.data.repository.SettingsRepository
 import com.jcu.brainbuddy.domain.AppSettings
@@ -30,16 +31,23 @@ fun result(
 )
 
 class FakeQuestionRepository(
-    var batch: QuestionBatch = QuestionBatch(listOf(question("one"), question("two")), isOnline = true)
+    var batch: QuestionBatch = QuestionBatch(listOf(question("one"), question("two")), QuestionSource.BUILT_IN)
 ) : QuestionRepository {
     var lastCategory: QuizCategory? = null
     var lastDifficulty: Difficulty? = null
     var lastCount: Int? = null
+    var lastChallengeMode: Boolean? = null
 
-    override suspend fun getQuestions(category: QuizCategory, difficulty: Difficulty, count: Int): QuestionBatch {
+    override suspend fun getQuestions(
+        category: QuizCategory,
+        difficulty: Difficulty,
+        count: Int,
+        challengeMode: Boolean
+    ): QuestionBatch {
         lastCategory = category
         lastDifficulty = difficulty
         lastCount = count
+        lastChallengeMode = challengeMode
         return batch
     }
 }
@@ -80,5 +88,9 @@ class FakeSettingsRepository(initial: AppSettings = AppSettings()) : SettingsRep
 
     override suspend fun setHaptics(enabled: Boolean) {
         state.value = state.value.copy(hapticsEnabled = enabled)
+    }
+
+    override suspend fun setChallengeMode(enabled: Boolean) {
+        state.value = state.value.copy(challengeMode = enabled)
     }
 }
