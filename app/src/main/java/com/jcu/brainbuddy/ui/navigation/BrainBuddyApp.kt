@@ -106,7 +106,7 @@ fun BrainBuddyApp(navController: NavHostController = rememberNavController()) {
                             popUpTo(Routes.RESULT) { inclusive = true }
                         }
                     },
-                    onHome = { navController.navigateTopLevel(Routes.HOME) }
+                    onHome = { navController.popBackStack(Routes.HOME, inclusive = false) }
                 )
             }
         }
